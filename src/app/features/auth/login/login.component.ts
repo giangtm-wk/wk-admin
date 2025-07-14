@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,10 +14,9 @@ import { TuiInputModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
     TuiInputModule,
     TuiTextfield,
     ReactiveFormsModule,
-    NgIf,
     TuiTextfieldControllerModule,
     TuiButtonLoading
-  ],
+],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

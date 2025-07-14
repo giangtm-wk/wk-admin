@@ -1,5 +1,5 @@
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport, } from '@angular/cdk/scrolling';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateUserDto, User } from '@models/user.model';
@@ -21,10 +21,10 @@ import {
   TuiTextfieldOptionsDirective,
   TuiTitle
 } from '@taiga-ui/core';
-import { TUI_CONFIRM, TuiChevron, TuiDataListWrapper, TuiSelect, TuiStatus } from '@taiga-ui/kit';
+import { TuiChevron, TuiDataListWrapper, TuiSelect, TuiStatus } from '@taiga-ui/kit';
 import { TuiInputModule, TuiMultiSelectModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
-import { EMPTY, Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -41,17 +41,15 @@ import { EMPTY, Subscription, switchMap } from 'rxjs';
     ReactiveFormsModule,
     TuiInputModule,
     TuiAutoFocus,
-    NgIf,
     TuiTextfieldOptionsDirective,
     TuiMultiSelectModule,
     TuiTextfieldControllerModule,
-    NgForOf,
     TuiTextfield,
     TuiChevron,
     TuiDataListWrapper,
     TuiSelect,
     TuiLoader
-  ],
+],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

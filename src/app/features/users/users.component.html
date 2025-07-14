@@ -7,7 +7,7 @@
     size="s"
     appearance="primary"
     (click)="openCreateUserDialog(createUserTpl)"
-  >
+    >
     Thêm mới
   </button>
 </div>
@@ -20,108 +20,108 @@
     [itemSize]="45"
     [maxBufferPx]="500"
     [minBufferPx]="400"
-  >
+    >
     <table
       tuiTable
       [columns]="columns"
-    >
+      >
       <thead>
-      <tr tuiThGroup>
-        <th
-          *tuiHead="'email'"
-          tuiTh
-          [sticky]="true"
-          [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-        >
-          Email
-        </th>
-        <th
-          *tuiHead="'name'"
-          tuiTh
-          [sticky]="true"
-          [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-        >
-          Tên
-        </th>
-        <th
-          *tuiHead="'roles'"
-          tuiTh
-          [sticky]="true"
-          [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-        >
-          Vai trò
-        </th>
-        <th
-          *tuiHead="'status'"
-          tuiTh
-          [sticky]="true"
-          [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-        >
-          Trạng thái
-        </th>
-        <th
-          *tuiHead="'action'"
-          tuiTh
-          [sticky]="true"
-          [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-        >
-          Hành động
-        </th>
-      </tr>
+        <tr tuiThGroup>
+          <th
+            *tuiHead="'email'"
+            tuiTh
+            [sticky]="true"
+            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+            Email
+          </th>
+          <th
+            *tuiHead="'name'"
+            tuiTh
+            [sticky]="true"
+            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+            Tên
+          </th>
+          <th
+            *tuiHead="'roles'"
+            tuiTh
+            [sticky]="true"
+            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+            Vai trò
+          </th>
+          <th
+            *tuiHead="'status'"
+            tuiTh
+            [sticky]="true"
+            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+            Trạng thái
+          </th>
+          <th
+            *tuiHead="'action'"
+            tuiTh
+            [sticky]="true"
+            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+            Hành động
+          </th>
+        </tr>
       </thead>
       <tbody tuiTbody>
-      <tr
-        *cdkVirtualFor="let item of userList() | tuiTableSort"
-        tuiTr
-      >
-        <td
-          *tuiCell="'email'"
-          tuiTd
-        >
-          {{ item.email }}
-        </td>
-        <td
-          *tuiCell="'name'"
-          tuiTd
-        >
-          {{ item.name }}
-        </td>
-        <td
-          *tuiCell="'roles'"
-          tuiTd
-        >
-          {{ item.roles.join(', ') }}
-        </td>
-        <td
-          *tuiCell="'status'"
-          tuiTd
-        >
-          {{ item.status }}
-        </td>
-        <td
-          *tuiCell="'action'"
-          tuiTd
-        >
-          <span tuiStatus>
-            <button
-              tuiButton
-              size="s"
-              appearance="info"
-              (click)="openUpdateUserDialog(updateUserTpl, item)"
+        <tr
+          *cdkVirtualFor="let item of userList() | tuiTableSort"
+          tuiTr
+          >
+          <td
+            *tuiCell="'email'"
+            tuiTd
             >
-              Chi tiết
-            </button>
-            <button
-              tuiButton
-              size="s"
-              appearance="secondary"
-              (click)="openDeleteUserDialog(deleteUserTpl, item)"
+            {{ item.email }}
+          </td>
+          <td
+            *tuiCell="'name'"
+            tuiTd
             >
-              Xóa
-            </button>
-          </span>
-        </td>
-      </tr>
+            {{ item.name }}
+          </td>
+          <td
+            *tuiCell="'roles'"
+            tuiTd
+            >
+            {{ item.roles.join(', ') }}
+          </td>
+          <td
+            *tuiCell="'status'"
+            tuiTd
+            >
+            {{ item.status }}
+          </td>
+          <td
+            *tuiCell="'action'"
+            tuiTd
+            >
+            <span tuiStatus>
+              <button
+                tuiButton
+                size="s"
+                appearance="info"
+                (click)="openUpdateUserDialog(updateUserTpl, item)"
+                >
+                Chi tiết
+              </button>
+              <button
+                tuiButton
+                size="s"
+                appearance="secondary"
+                (click)="openDeleteUserDialog(deleteUserTpl, item)"
+                >
+                Xóa
+              </button>
+            </span>
+          </td>
+        </tr>
       </tbody>
     </table>
   </cdk-virtual-scroll-viewport>
@@ -131,61 +131,77 @@
 <ng-template
   #createUserTpl
   let-observer
->
+  >
   <form
     [formGroup]="userForm"
     class="p-4"
-  >
+    >
     <tui-input
       tuiAutoFocus
       formControlName="email"
       [tuiTextfieldCleaner]="true"
-    >
+      >
       Email
       <input
         autocomplete="email"
         tuiTextfieldLegacy
         type="email"
-      />
+        />
     </tui-input>
-    <div *ngIf="userForm.controls['email']?.invalid && userForm.controls['email']?.touched" class="text-red-600 text-sm">
-      <div *ngIf="userForm.hasError('required', 'email')">Email là bắt buộc</div>
-      <div *ngIf="userForm.hasError('email', 'email')">Email không hợp lệ</div>
-    </div>
+    @if (email?.invalid && email?.touched) {
+      <div class="text-red-600 text-sm">
+        @if (userForm.hasError('required', 'email')) {
+          <div>Email là bắt buộc</div>
+        }
+        @if (userForm.hasError('email', 'email')) {
+          <div>Email không hợp lệ</div>
+        }
+      </div>
+    }
 
     <tui-input
       formControlName="password"
       type="password"
       [tuiTextfieldCleaner]="true"
       class="w-full mt-4"
-    >
+      >
       Mật khẩu
       <input
         autocomplete="password"
         tuiTextfieldLegacy
         type="password"
-      />
+        />
     </tui-input>
-    <div *ngIf="password?.invalid && password?.touched" class="text-red-600 text-sm">
-      <div *ngIf="password?.errors?.['required']">Mật khẩu là bắt buộc</div>
-      <div *ngIf="password?.errors?.['minlength']">Mật khẩu tối thiểu 6 ký tự</div>
-    </div>
+    @if (password?.invalid && password?.touched) {
+      <div class="text-red-600 text-sm">
+        @if (userForm.hasError('required', 'password')) {
+          <div>Mật khẩu là bắt buộc</div>
+        }
+        @if (userForm.hasError('minlength', 'password')) {
+          <div>Mật khẩu tối thiểu 6 ký tự</div>
+        }
+      </div>
+    }
 
     <tui-input
       formControlName="name"
       [tuiTextfieldCleaner]="true"
       class="w-full mt-4"
-    >
+      >
       Tên
       <input
         autocomplete="name"
         tuiTextfieldLegacy
         type="text"
-      />
+        />
     </tui-input>
-    <div *ngIf="userForm.controls['name']?.invalid && userForm.controls['name']?.touched" class="text-red-600 text-sm">
-      <div *ngIf="userForm.hasError('required', 'name')">Tên là bắt buộc</div>
-    </div>
+    @if (name?.invalid && name?.touched) {
+      <div class="text-red-600 text-sm">
+        @if (userForm.hasError('required', 'name')) {
+          <div>Tên là bắt buộc</div>
+        }
+      </div>
+    }
 
     <tui-multi-select
       [editable]="false"
@@ -193,48 +209,49 @@
       [tuiTextfieldLabelOutside]="true"
       formControlName="roles"
       class="w-full mt-4"
-    >
+      >
       <tui-data-list *tuiDataList>
         <tui-opt-group
           label="Select roles"
           tuiMultiSelectGroup
-        >
-          <button
-            *ngFor="let item of RoleList"
-            tuiOption
-            type="button"
-            [style.flex-direction]="'row-reverse'"
-            [value]="item"
           >
-            <span [style.flex]="1">{{ item }}</span>
-          </button>
+          @for (item of RoleList; track item) {
+            <button
+              tuiOption
+              type="button"
+              [style.flex-direction]="'row-reverse'"
+              [value]="item"
+              >
+              <span [style.flex]="1">{{ item }}</span>
+            </button>
+          }
         </tui-opt-group>
       </tui-data-list>
     </tui-multi-select>
 
     <tui-textfield
       tuiChevron
-      [content]="userForm.controls['status'].value"
+      [content]="status?.value"
       class="w-full mt-4"
-    >
+      >
       <input
         placeholder="Choose status"
         tuiSelect
         formControlName="status"
-      />
+        />
 
       <tui-data-list-wrapper
         *tuiTextfieldDropdown
         new
         [itemContent]="dropdownOptionContent"
         [items]="StatusList"
-      />
+        />
     </tui-textfield>
 
     <ng-template
       #dropdownOptionContent
       let-status
-    >
+      >
       <div class="card">
         {{ status }}
       </div>
@@ -247,7 +264,7 @@
         appearance="secondary"
         [disabled]="createUserStatus() === ApiStatus.LOADING"
         (click)="observer.complete()"
-      >
+        >
         Huỷ
       </button>
       <tui-loader
@@ -255,7 +272,7 @@
         [inheritColor]="true"
         [overlay]="true"
         [showLoader]="createUserStatus() === ApiStatus.LOADING"
-      >
+        >
         <button
           tuiButton
           type="submit"
@@ -263,7 +280,7 @@
           class="ml-2"
           [disabled]="userForm.invalid"
           (click)="createUser()"
-        >
+          >
           Tạo mới
         </button>
       </tui-loader>
@@ -275,23 +292,23 @@
 <ng-template
   #updateUserTpl
   let-observer
->
+  >
   <form
     [formGroup]="userForm"
     class="p-4"
-  >
+    >
     <tui-input
       [readOnly]="true"
       tuiAutoFocus
       formControlName="email"
       [tuiTextfieldCleaner]="true"
-    >
+      >
       Email
       <input
         autocomplete="email"
         tuiTextfieldLegacy
         type="email"
-      />
+        />
     </tui-input>
 
     <tui-input
@@ -299,34 +316,44 @@
       type="password"
       [tuiTextfieldCleaner]="true"
       class="w-full mt-4"
-    >
+      >
       Mật khẩu
       <input
         autocomplete="password"
         tuiTextfieldLegacy
         type="password"
-      />
+        />
     </tui-input>
-    <div *ngIf="password?.invalid && password?.touched" class="text-red-600 text-sm">
-      <div *ngIf="password?.errors?.['required']">Mật khẩu là bắt buộc</div>
-      <div *ngIf="password?.errors?.['minlength']">Mật khẩu tối thiểu 6 ký tự</div>
-    </div>
+    @if (password?.invalid && password?.touched) {
+      <div class="text-red-600 text-sm">
+        @if (userForm.hasError('required', 'password')) {
+          <div>Mật khẩu là bắt buộc</div>
+        }
+        @if (userForm.hasError('minlength', 'password')) {
+          <div>Mật khẩu tối thiểu 6 ký tự</div>
+        }
+      </div>
+    }
 
     <tui-input
       formControlName="name"
       [tuiTextfieldCleaner]="true"
       class="w-full mt-4"
-    >
+      >
       Tên
       <input
         autocomplete="name"
         tuiTextfieldLegacy
         type="text"
-      />
+        />
     </tui-input>
-    <div *ngIf="userForm.controls['name']?.invalid && userForm.controls['name']?.touched" class="text-red-600 text-sm">
-      <div *ngIf="userForm.hasError('required', 'name')">Tên là bắt buộc</div>
-    </div>
+    @if (name?.invalid && name?.touched) {
+      <div class="text-red-600 text-sm">
+        @if (userForm.hasError('required', 'name')) {
+          <div>Tên là bắt buộc</div>
+        }
+      </div>
+    }
 
     <tui-multi-select
       [editable]="false"
@@ -334,21 +361,22 @@
       [tuiTextfieldLabelOutside]="true"
       formControlName="roles"
       class="w-full mt-4"
-    >
+      >
       <tui-data-list *tuiDataList>
         <tui-opt-group
           label="Chọn vai trò"
           tuiMultiSelectGroup
-        >
-          <button
-            *ngFor="let item of RoleList"
-            tuiOption
-            type="button"
-            [style.flex-direction]="'row-reverse'"
-            [value]="item"
           >
-            <span [style.flex]="1">{{ item }}</span>
-          </button>
+          @for (item of RoleList; track item) {
+            <button
+              tuiOption
+              type="button"
+              [style.flex-direction]="'row-reverse'"
+              [value]="item"
+              >
+              <span [style.flex]="1">{{ item }}</span>
+            </button>
+          }
         </tui-opt-group>
       </tui-data-list>
     </tui-multi-select>
@@ -357,25 +385,25 @@
       tuiChevron
       [content]="userForm.controls['status'].value"
       class="w-full mt-4"
-    >
+      >
       <input
         placeholder="Chọn trạng thái"
         tuiSelect
         formControlName="status"
-      />
+        />
 
       <tui-data-list-wrapper
         *tuiTextfieldDropdown
         new
-        [itemContent]="dropdownOptionContent"
+        [itemContent]="statusSelectTpl"
         [items]="StatusList"
-      />
+        />
     </tui-textfield>
 
     <ng-template
-      #dropdownOptionContent
+      #statusSelectTpl
       let-status
-    >
+      >
       <div class="card">
         {{ status }}
       </div>
@@ -388,7 +416,7 @@
         appearance="secondary"
         [disabled]="updateUserStatus() === ApiStatus.LOADING"
         (click)="observer.complete()"
-      >
+        >
         Quay lại
       </button>
       <tui-loader
@@ -396,7 +424,7 @@
         [inheritColor]="true"
         [overlay]="true"
         [showLoader]="updateUserStatus() === ApiStatus.LOADING"
-      >
+        >
         <button
           tuiButton
           type="submit"
@@ -404,7 +432,7 @@
           class="ml-2"
           [disabled]="userForm.invalid"
           (click)="updateUser()"
-        >
+          >
           Cập nhật
         </button>
       </tui-loader>
@@ -431,7 +459,7 @@
         appearance="secondary"
         [disabled]="deleteUserStatus() === ApiStatus.LOADING"
         (click)="observer.complete()"
-      >
+        >
         Huỷ
       </button>
       <tui-loader
@@ -439,14 +467,14 @@
         [inheritColor]="true"
         [overlay]="true"
         [showLoader]="deleteUserStatus() === ApiStatus.LOADING"
-      >
+        >
         <button
           tuiButton
           type="button"
           appearance="negative"
           class="ml-2"
           (click)="deleteUser()"
-        >
+          >
           Xóa
         </button>
       </tui-loader>
