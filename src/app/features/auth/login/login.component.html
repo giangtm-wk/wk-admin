@@ -1,0 +1,48 @@
+<h2 class="text-2xl font-bold mb-6 text-center">Đăng nhập</h2>
+
+<form [formGroup]="form" (ngSubmit)="onLogin()" class="flex flex-col gap-4">
+  <tui-input
+    formControlName="email"
+    [tuiTextfieldCleaner]="true"
+  >
+    Email
+    <input
+      autocomplete="email"
+      tuiTextfieldLegacy
+      type="email"
+    />
+  </tui-input>
+  <div *ngIf="email?.invalid && email?.touched" class="text-red-600 text-sm">
+    <div *ngIf="email?.errors?.['required']">Email là bắt buộc</div>
+    <div *ngIf="email?.errors?.['email']">Email không hợp lệ</div>
+  </div>
+
+  <tui-input
+    formControlName="password"
+    type="password"
+    [tuiTextfieldCleaner]="true"
+    class="w-full"
+  >
+    Mật khẩu
+    <input
+      autocomplete="password"
+      tuiTextfieldLegacy
+      type="password"
+    />
+  </tui-input>
+  <div *ngIf="password?.invalid && password?.touched" class="text-red-600 text-sm">
+    <div *ngIf="password?.errors?.['required']">Mật khẩu là bắt buộc</div>
+    <div *ngIf="password?.errors?.['minlength']">Mật khẩu tối thiểu 6 ký tự</div>
+  </div>
+
+  <button
+    [loading]="loginApiStatus === HttpStatus.LOADING"
+    tuiButton
+    type="submit"
+    appearance="primary"
+    size="l"
+    class="w-full mt-2"
+  >
+    Đăng nhập
+  </button>
+</form>

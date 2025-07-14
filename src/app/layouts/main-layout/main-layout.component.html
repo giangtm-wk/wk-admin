@@ -1,0 +1,59 @@
+<tui-root>
+  <header tuiNavigationHeader>
+    <div class="w-full flex items-center justify-between">
+      <tui-avatar src="TG" />
+      <button
+        appearance="outline"
+        tuiAppearanceMode="checked"
+        tuiButton
+        type="button"
+        size="s"
+        [loading]="logoutStatus === HttpStatus.LOADING"
+        (click)="logout()"
+      >
+        Đăng xuất
+      </button>
+    </div>
+  </header>
+  <div [style.display]="'flex'">
+    <aside
+      class="aside"
+      [tuiNavigationAside]="expanded()"
+    >
+      <header>
+        <button
+          iconStart="@tui.home"
+          tuiAsideItem
+          type="button"
+          routerLink="/dashboard"
+        >
+          <span tuiFade>Dashboard</span>
+        </button>
+      </header>
+
+      <button
+        iconStart="@tui.users"
+        tuiAsideItem
+        type="button"
+        routerLink="/users"
+      >
+        Users
+      </button>
+
+      <footer>
+        <button
+          tuiAsideItem
+          type="button"
+          [iconStart]="expanded() ? '@tui.chevron-left' : '@tui.chevron-right'"
+          (click)="handleToggle()"
+        >
+          {{ expanded() ? 'Collapse' : 'Expand' }}
+        </button>
+      </footer>
+    </aside>
+
+    <main tuiNavigationMain class="main">
+      <router-outlet />
+    </main>
+  </div>
+</tui-root>
