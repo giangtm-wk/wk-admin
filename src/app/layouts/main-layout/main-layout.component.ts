@@ -47,7 +47,7 @@ export class MainLayoutComponent implements OnInit {
       error: () => {
         this.logoutStatus = ApiStatus.ERROR;
         this.alerts.open('', {
-          label: 'Logout failed',
+          label: 'Đăng xuất không thành công',
           appearance: 'warning',
           autoClose: 3000,
         }).subscribe()

@@ -12,12 +12,12 @@
       type="email"
       />
   </tui-input>
-  @if (email?.invalid && email?.touched) {
+  @if (email.touched && email.invalid) {
     <div class="text-red-600 text-sm">
-      @if (form.hasError('email', 'required')) {
+      @if (email.hasError('required')) {
         <div>Email là bắt buộc</div>
       }
-      @if (form.hasError('email', 'email')) {
+      @if (email.hasError('email')) {
         <div>Email không hợp lệ</div>
       }
     </div>
@@ -36,18 +36,19 @@
       type="password"
       />
   </tui-input>
-  @if (password?.invalid && password?.touched) {
+  @if (password.touched && password.invalid) {
     <div class="text-red-600 text-sm">
-      @if (form.hasError('required', 'password')) {
+      @if (password.hasError('required')) {
         <div>Mật khẩu là bắt buộc</div>
       }
-      @if (form.hasError('minlength', 'password')) {
+      @if (password.hasError('minlength')) {
         <div>Mật khẩu tối thiểu 6 ký tự</div>
       }
     </div>
   }
 
   <button
+    [disabled]="form.invalid"
     [loading]="loginApiStatus === HttpStatus.LOADING"
     tuiButton
     type="submit"

@@ -38,11 +38,11 @@ export class LoginComponent {
   loginApiStatus = ApiStatus.IDLE;
 
   get email() {
-    return this.form.get('email');
+    return this.form.get('email') as FormControl;
   }
 
   get password() {
-    return this.form.get('password');
+    return this.form.get('password') as FormControl;
   }
 
   onLogin() {

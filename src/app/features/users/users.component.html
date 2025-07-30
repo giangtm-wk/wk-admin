@@ -148,12 +148,12 @@
         type="email"
         />
     </tui-input>
-    @if (email?.invalid && email?.touched) {
+    @if (email.invalid && email.touched) {
       <div class="text-red-600 text-sm">
-        @if (userForm.hasError('required', 'email')) {
+        @if (email.hasError('required')) {
           <div>Email là bắt buộc</div>
         }
-        @if (userForm.hasError('email', 'email')) {
+        @if (email.hasError('email')) {
           <div>Email không hợp lệ</div>
         }
       </div>
@@ -172,12 +172,12 @@
         type="password"
         />
     </tui-input>
-    @if (password?.invalid && password?.touched) {
+    @if (password.invalid && password.touched) {
       <div class="text-red-600 text-sm">
-        @if (userForm.hasError('required', 'password')) {
+        @if (password.hasError('required')) {
           <div>Mật khẩu là bắt buộc</div>
         }
-        @if (userForm.hasError('minlength', 'password')) {
+        @if (password.hasError('minlength')) {
           <div>Mật khẩu tối thiểu 6 ký tự</div>
         }
       </div>
@@ -195,9 +195,9 @@
         type="text"
         />
     </tui-input>
-    @if (name?.invalid && name?.touched) {
+    @if (name.invalid && name.touched) {
       <div class="text-red-600 text-sm">
-        @if (userForm.hasError('required', 'name')) {
+        @if (name.hasError('required')) {
           <div>Tên là bắt buộc</div>
         }
       </div>
@@ -231,11 +231,11 @@
 
     <tui-textfield
       tuiChevron
-      [content]="status?.value"
+      [content]="status.value"
       class="w-full mt-4"
       >
       <input
-        placeholder="Choose status"
+        placeholder="Chọn trạng thái"
         tuiSelect
         formControlName="status"
         />
@@ -324,12 +324,12 @@
         type="password"
         />
     </tui-input>
-    @if (password?.invalid && password?.touched) {
+    @if (password.invalid && password.touched) {
       <div class="text-red-600 text-sm">
-        @if (userForm.hasError('required', 'password')) {
+        @if (password.hasError('required')) {
           <div>Mật khẩu là bắt buộc</div>
         }
-        @if (userForm.hasError('minlength', 'password')) {
+        @if (password.hasError('minlength')) {
           <div>Mật khẩu tối thiểu 6 ký tự</div>
         }
       </div>
@@ -347,9 +347,9 @@
         type="text"
         />
     </tui-input>
-    @if (name?.invalid && name?.touched) {
+    @if (name.invalid && name.touched) {
       <div class="text-red-600 text-sm">
-        @if (userForm.hasError('required', 'name')) {
+        @if (name.hasError('required')) {
           <div>Tên là bắt buộc</div>
         }
       </div>

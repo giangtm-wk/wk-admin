@@ -1,7 +1,7 @@
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport, } from '@angular/cdk/scrolling';
 
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateUserDto, User } from '@models/user.model';
 import { ApiStatus } from '@shared/enums/api.enum';
 import { UserRole } from '@shared/enums/user-role.enum';
@@ -82,19 +82,19 @@ export class UsersComponent implements OnInit {
     status: [UserStatus.ACTIVE, [Validators.required]],
   });
   get email() {
-    return this.userForm.get('email');
+    return this.userForm.get('email') as FormControl;
   }
   get password() {
-    return this.userForm.get('password');
+    return this.userForm.get('password') as FormControl;
   }
   get name() {
-    return this.userForm.get('name');
+    return this.userForm.get('name') as FormControl;
   }
   get roles() {
-    return this.userForm.get('roles');
+    return this.userForm.get('roles') as FormControl;
   }
   get status() {
-    return this.userForm.get('status');
+    return this.userForm.get('status') as FormControl;
   }
 
   selectedUser?: User;
