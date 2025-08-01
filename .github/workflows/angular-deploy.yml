@@ -1,0 +1,64 @@
+name: Angular CI/CD
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      SHORT_SHA: ${{ github.sha }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular app
+        run: npm run build --prod
+
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract short commit hash
+        id: vars
+        run: echo "SHORT_SHA=${SHORT_SHA:0:8}" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: docker build -t wk-admin:${SHORT_SHA:0:8} .
+
+      - name: Save Docker image to archive
+        run: docker save wk-admin:${SHORT_SHA:0:8} | gzip > wk-admin.tar.gz
+
+      - name: Copy Docker image to VPS via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "wk-admin.tar.gz"
+          target: "~/deploy"
+
+      - name: Remote deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ~/deploy
+            docker load < wk-admin.tar.gz
+            docker stop angular-app || true
+            docker rm angular-app || true
+            docker run -d --name angular-app -p 80:80 wk-admin:${SHORT_SHA:0:8}
