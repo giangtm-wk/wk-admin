@@ -1,0 +1,119 @@
+<div class="mb-4 flex items-center justify-between">
+  <h2 tuiTitle="m">
+    Danh sách sản phẩm
+  </h2>
+  <button
+    tuiButton
+    size="s"
+    appearance="primary"
+    (click)="openCreateProductDialog()"
+  >
+    Thêm mới
+  </button>
+</div>
+@switch (getProductListStatus()) {
+  @case(ApiStatus.LOADING) {
+    <tui-loader></tui-loader>
+  }
+  @case (ApiStatus.SUCCESS) {
+    <tui-scrollbar>
+      <cdk-virtual-scroll-viewport
+        #viewport
+        appendOnly
+        tuiScrollable
+        class="viewport tui-zero-scrollbar"
+        [itemSize]="45"
+        [maxBufferPx]="500"
+        [minBufferPx]="400"
+      >
+        <table
+          tuiTable
+          [columns]="columns"
+        >
+          <thead>
+          <tr tuiThGroup>
+            <th
+              *tuiHead="'name'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+              Tên
+            </th>
+            <th
+              *tuiHead="'description'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+              Mô tả
+            </th>
+            <th
+              *tuiHead="'status'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+              Trạng thái
+            </th>
+            <th
+              *tuiHead="'action'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+            >
+              Hành động
+            </th>
+          </tr>
+          </thead>
+          <tbody tuiTbody>
+          <tr
+            *cdkVirtualFor="let item of productList() | tuiTableSort"
+            tuiTr
+          >
+            <td
+              *tuiCell="'name'"
+              tuiTd
+            >
+              {{ item.name }}
+            </td>
+            <td
+              *tuiCell="'description'"
+              tuiTd
+            >
+              {{ item.description }}
+            </td>
+            <td
+              *tuiCell="'status'"
+              tuiTd
+            >
+              {{ item.status }}
+            </td>
+            <td
+              *tuiCell="'action'"
+              tuiTd
+            >
+            <span tuiStatus>
+              <button
+                tuiButton
+                size="s"
+                appearance="info"
+              >
+                Chi tiết
+              </button>
+              <button
+                tuiButton
+                size="s"
+                appearance="secondary"
+              >
+                Xóa
+              </button>
+            </span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </cdk-virtual-scroll-viewport>
+    </tui-scrollbar>
+  }
+}

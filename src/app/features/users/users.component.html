@@ -11,96 +11,101 @@
     Thêm mới
   </button>
 </div>
-<tui-scrollbar>
-  <cdk-virtual-scroll-viewport
-    #viewport
-    appendOnly
-    tuiScrollable
-    class="viewport tui-zero-scrollbar"
-    [itemSize]="45"
-    [maxBufferPx]="500"
-    [minBufferPx]="400"
-    >
-    <table
-      tuiTable
-      [columns]="columns"
+@switch (getUserListStatus()) {
+  @case (ApiStatus.LOADING) {
+    <tui-loader></tui-loader>
+  }
+  @case (ApiStatus.SUCCESS) {
+    <tui-scrollbar>
+      <cdk-virtual-scroll-viewport
+        #viewport
+        appendOnly
+        tuiScrollable
+        class="viewport tui-zero-scrollbar"
+        [itemSize]="45"
+        [maxBufferPx]="500"
+        [minBufferPx]="400"
       >
-      <thead>
-        <tr tuiThGroup>
-          <th
-            *tuiHead="'email'"
-            tuiTh
-            [sticky]="true"
-            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+        <table
+          tuiTable
+          [columns]="columns"
+        >
+          <thead>
+          <tr tuiThGroup>
+            <th
+              *tuiHead="'email'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
             >
-            Email
-          </th>
-          <th
-            *tuiHead="'name'"
-            tuiTh
-            [sticky]="true"
-            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              Email
+            </th>
+            <th
+              *tuiHead="'name'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
             >
-            Tên
-          </th>
-          <th
-            *tuiHead="'roles'"
-            tuiTh
-            [sticky]="true"
-            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              Tên
+            </th>
+            <th
+              *tuiHead="'roles'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
             >
-            Vai trò
-          </th>
-          <th
-            *tuiHead="'status'"
-            tuiTh
-            [sticky]="true"
-            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              Vai trò
+            </th>
+            <th
+              *tuiHead="'status'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
             >
-            Trạng thái
-          </th>
-          <th
-            *tuiHead="'action'"
-            tuiTh
-            [sticky]="true"
-            [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              Trạng thái
+            </th>
+            <th
+              *tuiHead="'action'"
+              tuiTh
+              [sticky]="true"
+              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
             >
-            Hành động
-          </th>
-        </tr>
-      </thead>
-      <tbody tuiTbody>
-        <tr
-          *cdkVirtualFor="let item of userList() | tuiTableSort"
-          tuiTr
+              Hành động
+            </th>
+          </tr>
+          </thead>
+          <tbody tuiTbody>
+          <tr
+            *cdkVirtualFor="let item of userList() | tuiTableSort"
+            tuiTr
           >
-          <td
-            *tuiCell="'email'"
-            tuiTd
+            <td
+              *tuiCell="'email'"
+              tuiTd
             >
-            {{ item.email }}
-          </td>
-          <td
-            *tuiCell="'name'"
-            tuiTd
+              {{ item.email }}
+            </td>
+            <td
+              *tuiCell="'name'"
+              tuiTd
             >
-            {{ item.name }}
-          </td>
-          <td
-            *tuiCell="'roles'"
-            tuiTd
+              {{ item.name }}
+            </td>
+            <td
+              *tuiCell="'roles'"
+              tuiTd
             >
-            {{ item.roles.join(', ') }}
-          </td>
-          <td
-            *tuiCell="'status'"
-            tuiTd
+              {{ item.roles.join(', ') }}
+            </td>
+            <td
+              *tuiCell="'status'"
+              tuiTd
             >
-            {{ item.status }}
-          </td>
-          <td
-            *tuiCell="'action'"
-            tuiTd
+              {{ item.status }}
+            </td>
+            <td
+              *tuiCell="'action'"
+              tuiTd
             >
             <span tuiStatus>
               <button
@@ -108,7 +113,7 @@
                 size="s"
                 appearance="info"
                 (click)="openUpdateUserDialog(updateUserTpl, item)"
-                >
+              >
                 Chi tiết
               </button>
               <button
@@ -116,16 +121,18 @@
                 size="s"
                 appearance="secondary"
                 (click)="openDeleteUserDialog(deleteUserTpl, item)"
-                >
+              >
                 Xóa
               </button>
             </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </cdk-virtual-scroll-viewport>
-</tui-scrollbar>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </cdk-virtual-scroll-viewport>
+    </tui-scrollbar>
+  }
+}
 
 <!-- Thêm mới -->
 <ng-template

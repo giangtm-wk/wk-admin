@@ -1,12 +1,12 @@
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport, } from '@angular/cdk/scrolling';
-
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateUserDto, User } from '@models/user.model';
 import { ApiStatus } from '@shared/enums/api.enum';
 import { UserRole } from '@shared/enums/user-role.enum';
 import { UserStatus } from '@shared/enums/user-status.enum';
-import { UsersService } from '@shared/http-access/users.service';
+import { UsersHttpService } from '@shared/http-access/users-http.service';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TuiAutoFocus } from '@taiga-ui/cdk';
 import {
@@ -55,10 +55,11 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent implements OnInit {
-  private usersService = inject(UsersService);
-  private fb = inject(FormBuilder);
+  private readonly usersHttpService = inject(UsersHttpService);
+  private readonly fb = inject(FormBuilder);
   private readonly dialogs = inject(TuiDialogService);
   private readonly alerts = inject(TuiAlertService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly ApiStatus = ApiStatus;
   protected readonly columns = ['email', 'name', 'roles', 'status', 'action'];
@@ -105,7 +106,12 @@ export class UsersComponent implements OnInit {
 
   getUserList() {
     this.getUserListStatus.set(ApiStatus.LOADING);
-    this.usersService.getUserList().subscribe({
+    this.usersHttpService
+      .getUserList()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
       next: (data) => {
         this.userList.set(data);
         this.getUserListStatus.set(ApiStatus.SUCCESS);
@@ -141,7 +147,7 @@ export class UsersComponent implements OnInit {
       return;
     }
     this.createUserStatus.set(ApiStatus.LOADING);
-    this.usersService.createUser(this.userForm.value as CreateUserDto).subscribe({
+    this.usersHttpService.createUser(this.userForm.value as CreateUserDto).subscribe({
       next: () => {
         this.createUserStatus.set(ApiStatus.SUCCESS);
         if (this.dialogRef) {
@@ -180,7 +186,7 @@ export class UsersComponent implements OnInit {
       return;
     }
     this.updateUserStatus.set(ApiStatus.LOADING);
-    this.usersService.updateUser(this.selectedUser.id, this.userForm.value as CreateUserDto).subscribe({
+    this.usersHttpService.updateUser(this.selectedUser.id, this.userForm.value as CreateUserDto).subscribe({
       next: () => {
         this.updateUserStatus.set(ApiStatus.SUCCESS);
         this.dialogRef?.unsubscribe();
@@ -209,7 +215,7 @@ export class UsersComponent implements OnInit {
       return;
     }
     this.deleteUserStatus.set(ApiStatus.LOADING);
-    return this.usersService
+    return this.usersHttpService
       .updateUser(this.selectedUser.id, { status: UserStatus.DELETED })
       .pipe()
       .subscribe({

@@ -11,12 +11,6 @@ export interface User {
   updatedAt: Date;
 }
 
-export interface CreateUserDto {
-  name: string;
-  email: string;
-  password: string;
-  roles: UserRole[];
-  status: UserStatus;
-}
+export type CreateUserDto = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface UpdateUserDto extends Partial<CreateUserDto> {}

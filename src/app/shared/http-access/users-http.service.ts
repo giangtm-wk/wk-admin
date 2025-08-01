@@ -6,7 +6,7 @@ import { CreateUserDto, UpdateUserDto, User } from '@models/user.model';
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class UsersHttpService {
   private readonly appConfig = inject(APP_CONFIG);
   private readonly http = inject(HttpClient);
 
