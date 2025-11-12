@@ -4,4 +4,5 @@ export enum ProductStatus {
   ARCHIVED = 'archived',
   UNLISTED = 'unlisted',
   PREORDER = 'preorder',
+  DELETED = 'deleted',
 }

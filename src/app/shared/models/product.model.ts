@@ -1,7 +1,7 @@
 import { ProductStatus } from '@shared/enums/product-status.enum';
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   description: string;
   originPrice: number;
