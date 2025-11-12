@@ -1,7 +1,7 @@
-import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport, } from '@angular/cdk/scrolling';
+import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateUserDto, User } from '@models/user.model';
 import { ApiStatus } from '@shared/enums/api.enum';
 import { UserRole } from '@shared/enums/user-role.enum';
@@ -19,7 +19,7 @@ import {
   TuiScrollbar,
   TuiTextfield,
   TuiTextfieldOptionsDirective,
-  TuiTitle
+  TuiTitle,
 } from '@taiga-ui/core';
 import { TuiChevron, TuiDataListWrapper, TuiSelect, TuiStatus } from '@taiga-ui/kit';
 import { TuiInputModule, TuiMultiSelectModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
@@ -48,8 +48,8 @@ import { Subscription } from 'rxjs';
     TuiChevron,
     TuiDataListWrapper,
     TuiSelect,
-    TuiLoader
-],
+    TuiLoader,
+  ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,7 +73,13 @@ export class UsersComponent implements OnInit {
   deleteUserStatus = signal<ApiStatus>(ApiStatus.IDLE);
 
   protected readonly RoleList = [UserRole.USER, UserRole.ADMIN, UserRole.MODERATOR];
-  protected readonly StatusList = [UserStatus.ACTIVE, UserStatus.INACTIVE, UserStatus.BANNED, UserStatus.DELETED, UserStatus.UNVERIFIED];
+  protected readonly StatusList = [
+    UserStatus.ACTIVE,
+    UserStatus.INACTIVE,
+    UserStatus.BANNED,
+    UserStatus.DELETED,
+    UserStatus.UNVERIFIED,
+  ];
 
   userForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -83,19 +89,19 @@ export class UsersComponent implements OnInit {
     status: [UserStatus.ACTIVE, [Validators.required]],
   });
   get email() {
-    return this.userForm.get('email') as FormControl;
+    return this.userForm.controls.email;
   }
   get password() {
-    return this.userForm.get('password') as FormControl;
+    return this.userForm.controls.password;
   }
   get name() {
-    return this.userForm.get('name') as FormControl;
+    return this.userForm.controls.name;
   }
   get roles() {
-    return this.userForm.get('roles') as FormControl;
+    return this.userForm.controls.roles;
   }
   get status() {
-    return this.userForm.get('status') as FormControl;
+    return this.userForm.controls.status;
   }
 
   selectedUser?: User;
@@ -108,23 +114,23 @@ export class UsersComponent implements OnInit {
     this.getUserListStatus.set(ApiStatus.LOADING);
     this.usersHttpService
       .getUserList()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: (data) => {
-        this.userList.set(data);
-        this.getUserListStatus.set(ApiStatus.SUCCESS);
-      },
-      error: () => {
-        this.alerts.open('', {
-          label: 'Không thể tải danh sách người dùng',
-          appearance: 'warning',
-          autoClose: 3000,
-        }).subscribe();
-        this.getUserListStatus.set(ApiStatus.ERROR);
-      }
-    });
+        next: (data) => {
+          this.userList.set(data);
+          this.getUserListStatus.set(ApiStatus.SUCCESS);
+        },
+        error: () => {
+          this.alerts
+            .open('', {
+              label: 'Không thể tải danh sách người dùng',
+              appearance: 'warning',
+              autoClose: 3000,
+            })
+            .subscribe();
+          this.getUserListStatus.set(ApiStatus.ERROR);
+        },
+      });
   }
 
   openCreateUserDialog(content: PolymorpheusContent<TuiDialogContext>) {
@@ -136,9 +142,11 @@ export class UsersComponent implements OnInit {
       roles: [UserRole.USER],
       status: UserStatus.ACTIVE,
     });
-    this.dialogRef = this.dialogs.open(content, {
-      size: 'fullscreen'
-    }).subscribe();
+    this.dialogRef = this.dialogs
+      .open(content, {
+        size: 'fullscreen',
+      })
+      .subscribe();
   }
 
   createUser() {
@@ -156,13 +164,15 @@ export class UsersComponent implements OnInit {
         this.getUserList();
       },
       error: () => {
-        this.alerts.open('', {
-          label: 'Không thể tạo người dùng mới',
-          appearance: 'warning',
-          autoClose: 3000,
-        }).subscribe();
+        this.alerts
+          .open('', {
+            label: 'Không thể tạo người dùng mới',
+            appearance: 'warning',
+            autoClose: 3000,
+          })
+          .subscribe();
         this.createUserStatus.set(ApiStatus.ERROR);
-      }
+      },
     });
   }
 
@@ -175,9 +185,11 @@ export class UsersComponent implements OnInit {
       roles: user.roles,
       status: user.status,
     });
-    this.dialogRef = this.dialogs.open(content, {
-      size: 'fullscreen'
-    }).subscribe();
+    this.dialogRef = this.dialogs
+      .open(content, {
+        size: 'fullscreen',
+      })
+      .subscribe();
   }
 
   updateUser() {
@@ -193,21 +205,25 @@ export class UsersComponent implements OnInit {
         this.getUserList();
       },
       error: () => {
-        this.alerts.open('', {
-          label: 'Không thể cập nhật thông tin người dùng',
-          appearance: 'warning',
-          autoClose: 3000,
-        }).subscribe();
+        this.alerts
+          .open('', {
+            label: 'Không thể cập nhật thông tin người dùng',
+            appearance: 'warning',
+            autoClose: 3000,
+          })
+          .subscribe();
         this.updateUserStatus.set(ApiStatus.ERROR);
-      }
+      },
     });
   }
 
   openDeleteUserDialog(content: PolymorpheusContent<TuiDialogContext>, user: User) {
     this.selectedUser = user;
-    this.dialogRef = this.dialogs.open(content, {
-      size: 'fullscreen'
-    }).subscribe();
+    this.dialogRef = this.dialogs
+      .open(content, {
+        size: 'fullscreen',
+      })
+      .subscribe();
   }
 
   deleteUser() {
@@ -225,13 +241,15 @@ export class UsersComponent implements OnInit {
           this.getUserList();
         },
         error: () => {
-          this.alerts.open('', {
-            label: 'Không thể xóa người dùng',
-            appearance: 'warning',
-            autoClose: 3000,
-          }).subscribe();
+          this.alerts
+            .open('', {
+              label: 'Không thể xóa người dùng',
+              appearance: 'warning',
+              autoClose: 3000,
+            })
+            .subscribe();
           this.deleteUserStatus.set(ApiStatus.ERROR);
-        }
+        },
       });
   }
 }

@@ -19,7 +19,7 @@ export interface Product {
   sizes?: string[];
   materials?: string[];
   origin?: string;
-  additionalInfo?: { [key: string]: any };
+  additionalInfo?: { [key: string]: unknown };
   status: ProductStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -27,4 +27,4 @@ export interface Product {
 
 export type CreateProductDto = Omit<Product, 'id' | 'createdAt' | 'updatedAt'>;
 
-export interface UpdateProductDto extends Partial<CreateProductDto> {}
+export type UpdateProductDto = Partial<CreateProductDto>;

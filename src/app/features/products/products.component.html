@@ -1,18 +1,11 @@
 <div class="mb-4 flex items-center justify-between">
-  <h2 tuiTitle="m">
-    Danh sách sản phẩm
-  </h2>
-  <button
-    tuiButton
-    size="s"
-    appearance="primary"
-    (click)="openCreateProductDialog(createProductTpl)"
-  >
+  <h2 tuiTitle="m"> Danh sách sản phẩm </h2>
+  <button tuiButton size="s" appearance="primary" (click)="openCreateProductDialog(createProductTpl)">
     Thêm mới
   </button>
 </div>
 @switch (getProductListStatus()) {
-  @case(ApiStatus.LOADING) {
+  @case (ApiStatus.LOADING) {
     <tui-loader></tui-loader>
   }
   @case (ApiStatus.SUCCESS) {
@@ -26,93 +19,95 @@
         [maxBufferPx]="500"
         [minBufferPx]="400"
       >
-        <table
-          tuiTable
-          [columns]="columns"
-        >
+        <table tuiTable [columns]="columns">
           <thead>
-          <tr tuiThGroup>
-            <th
-              *tuiHead="'name'"
-              tuiTh
-              [sticky]="true"
-              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-            >
-              Tên
-            </th>
-            <th
-              *tuiHead="'description'"
-              tuiTh
-              [sticky]="true"
-              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-            >
-              Mô tả
-            </th>
-            <th
-              *tuiHead="'status'"
-              tuiTh
-              [sticky]="true"
-              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-            >
-              Trạng thái
-            </th>
-            <th
-              *tuiHead="'action'"
-              tuiTh
-              [sticky]="true"
-              [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
-            >
-              Hành động
-            </th>
-          </tr>
+            <tr tuiThGroup>
+              <th
+                *tuiHead="'name'"
+                tuiTh
+                [sticky]="true"
+                [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              >
+                Tên
+              </th>
+              <th
+                *tuiHead="'originPrice'"
+                tuiTh
+                [sticky]="true"
+                [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              >
+                Giá gốc
+              </th>
+              <th
+                *tuiHead="'price'"
+                tuiTh
+                [sticky]="true"
+                [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              >
+                Giá bán
+              </th>
+              <th
+                *tuiHead="'stock'"
+                tuiTh
+                [sticky]="true"
+                [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              >
+                Tồn kho
+              </th>
+              <th
+                *tuiHead="'status'"
+                tuiTh
+                [sticky]="true"
+                [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              >
+                Trạng thái
+              </th>
+              <th
+                *tuiHead="'action'"
+                tuiTh
+                [sticky]="true"
+                [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+              >
+                Hành động
+              </th>
+            </tr>
           </thead>
           <tbody tuiTbody>
-          <tr
-            *cdkVirtualFor="let item of productList() | tuiTableSort"
-            tuiTr
-          >
-            <td
-              *tuiCell="'name'"
-              tuiTd
-            >
-              {{ item.name }}
-            </td>
-            <td
-              *tuiCell="'description'"
-              tuiTd
-            >
-              {{ item.description }}
-            </td>
-            <td
-              *tuiCell="'status'"
-              tuiTd
-            >
-              {{ item.status }}
-            </td>
-            <td
-              *tuiCell="'action'"
-              tuiTd
-            >
-            <span tuiStatus>
-              <button
-                tuiButton
-                size="s"
-                appearance="info"
-                (click)="openUpdateProductDialog(updateProductTpl, item)"
-              >
-                Chi tiết
-              </button>
-              <button
-                tuiButton
-                size="s"
-                appearance="secondary"
-                (click)="openDeleteProductDialog(deleteProductTpl, item)"
-              >
-                Xóa
-              </button>
-            </span>
-            </td>
-          </tr>
+            <tr *cdkVirtualFor="let item of productList() | tuiTableSort" tuiTr>
+              <td *tuiCell="'name'" tuiTd>
+                {{ item.name }}
+              </td>
+              <td *tuiCell="'originPrice'" tuiTd> {{ item.originPrice | number: '1.0-0' }} đ </td>
+              <td *tuiCell="'price'" tuiTd>
+                {{ item.price ? (item.price | number: '1.0-0') + ' đ' : '-' }}
+              </td>
+              <td *tuiCell="'stock'" tuiTd>
+                {{ item.stock ?? '-' }}
+              </td>
+              <td *tuiCell="'status'" tuiTd>
+                {{ getStatusLabel(item.status) }}
+              </td>
+              <td *tuiCell="'action'" tuiTd>
+                <span tuiStatus>
+                  <button
+                    tuiButton
+                    size="s"
+                    appearance="info"
+                    (click)="openUpdateProductDialog(updateProductTpl, item)"
+                  >
+                    Chi tiết
+                  </button>
+                  <button
+                    tuiButton
+                    size="s"
+                    appearance="secondary"
+                    (click)="openDeleteProductDialog(deleteProductTpl, item)"
+                  >
+                    Xóa
+                  </button>
+                </span>
+              </td>
+            </tr>
           </tbody>
         </table>
       </cdk-virtual-scroll-viewport>
@@ -121,24 +116,11 @@
 }
 
 <!-- Thêm mới -->
-<ng-template
-  #createProductTpl
-  let-observer
-  >
-  <form
-    [formGroup]="productForm"
-    class="p-4"
-    >
-    <tui-input
-      tuiAutoFocus
-      formControlName="name"
-      [tuiTextfieldCleaner]="true"
-      >
+<ng-template #createProductTpl let-observer>
+  <form [formGroup]="productForm" class="p-4">
+    <tui-input tuiAutoFocus formControlName="name" [tuiTextfieldCleaner]="true">
       Tên sản phẩm
-      <input
-        tuiTextfieldLegacy
-        type="text"
-        />
+      <input tuiTextfieldLegacy type="text" />
     </tui-input>
     @if (name.invalid && name.touched) {
       <div class="text-red-600 text-sm">
@@ -148,46 +130,103 @@
       </div>
     }
 
-    <tui-textarea
-      formControlName="description"
-      [tuiTextfieldCleaner]="true"
-      class="w-full mt-4"
-      >
-      Mô tả
-    </tui-textarea>
-    @if (description.invalid && description.touched) {
+    <tui-textarea formControlName="description" [tuiTextfieldCleaner]="true" class="w-full mt-4"> Mô tả </tui-textarea>
+
+    <tui-input formControlName="originPrice" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Giá gốc
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
+    @if (originPrice.invalid && originPrice.touched) {
       <div class="text-red-600 text-sm">
-        @if (description.hasError('required')) {
-          <div>Mô tả là bắt buộc</div>
+        @if (originPrice.hasError('required')) {
+          <div>Giá gốc là bắt buộc</div>
+        }
+        @if (originPrice.hasError('min')) {
+          <div>Giá gốc phải lớn hơn hoặc bằng 0</div>
         }
       </div>
     }
 
-    <tui-textfield
-      tuiChevron
-      [content]="status.value"
-      class="w-full mt-4"
-      >
-      <input
-        placeholder="Chọn trạng thái"
-        tuiSelect
-        formControlName="status"
-        />
+    <tui-input formControlName="price" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Giá bán
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
 
-      <tui-data-list-wrapper
-        *tuiTextfieldDropdown
-        new
-        [itemContent]="dropdownOptionContent"
-        [items]="StatusList"
-        />
+    <tui-input formControlName="discount" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Giảm giá (%)
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
+    @if (discount.invalid && discount.touched) {
+      <div class="text-red-600 text-sm">
+        @if (discount.hasError('min')) {
+          <div>Giảm giá phải lớn hơn hoặc bằng 0</div>
+        }
+        @if (discount.hasError('max')) {
+          <div>Giảm giá không được vượt quá 100</div>
+        }
+      </div>
+    }
+
+    <tui-input formControlName="stock" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Số lượng tồn kho
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
+    @if (stock.invalid && stock.touched) {
+      <div class="text-red-600 text-sm">
+        @if (stock.hasError('min')) {
+          <div>Số lượng tồn kho phải lớn hơn hoặc bằng 0</div>
+        }
+      </div>
+    }
+
+    <tui-input formControlName="brand" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Thương hiệu
+      <input tuiTextfieldLegacy type="text" />
+    </tui-input>
+
+    <tui-input formControlName="weight" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Trọng lượng
+      <input tuiTextfieldLegacy type="text" />
+    </tui-input>
+
+    <tui-input formControlName="origin" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Xuất xứ
+      <input tuiTextfieldLegacy type="text" />
+    </tui-input>
+
+    <tui-textarea formControlName="categories" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Danh mục (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="tags" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Thẻ (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="colors" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Màu sắc (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="sizes" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Kích thước (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="materials" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Chất liệu (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="imageUrls" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      URL ảnh (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textfield tuiChevron [content]="getStatusLabel(status.value)" class="w-full mt-4">
+      <input placeholder="Chọn trạng thái" tuiSelect formControlName="status" />
+
+      <tui-data-list-wrapper *tuiTextfieldDropdown new [itemContent]="dropdownOptionContent" [items]="StatusList" />
     </tui-textfield>
 
-    <ng-template
-      #dropdownOptionContent
-      let-status
-      >
+    <ng-template #dropdownOptionContent let-status>
       <div class="card">
-        {{ status }}
+        {{ getStatusLabel(status) }}
       </div>
     </ng-template>
 
@@ -198,7 +237,7 @@
         appearance="secondary"
         [disabled]="createProductStatus() === ApiStatus.LOADING"
         (click)="observer.complete()"
-        >
+      >
         Huỷ
       </button>
       <tui-loader
@@ -206,7 +245,7 @@
         [inheritColor]="true"
         [overlay]="true"
         [showLoader]="createProductStatus() === ApiStatus.LOADING"
-        >
+      >
         <button
           tuiButton
           type="button"
@@ -214,7 +253,7 @@
           class="ml-2"
           [disabled]="productForm.invalid"
           (click)="createProduct()"
-          >
+        >
           Tạo mới
         </button>
       </tui-loader>
@@ -223,24 +262,11 @@
 </ng-template>
 
 <!-- Chi tiết / Cập nhật -->
-<ng-template
-  #updateProductTpl
-  let-observer
-  >
-  <form
-    [formGroup]="productForm"
-    class="p-4"
-    >
-    <tui-input
-      tuiAutoFocus
-      formControlName="name"
-      [tuiTextfieldCleaner]="true"
-      >
+<ng-template #updateProductTpl let-observer>
+  <form [formGroup]="productForm" class="p-4">
+    <tui-input tuiAutoFocus formControlName="name" [tuiTextfieldCleaner]="true">
       Tên sản phẩm
-      <input
-        tuiTextfieldLegacy
-        type="text"
-        />
+      <input tuiTextfieldLegacy type="text" />
     </tui-input>
     @if (name.invalid && name.touched) {
       <div class="text-red-600 text-sm">
@@ -250,46 +276,103 @@
       </div>
     }
 
-    <tui-textarea
-      formControlName="description"
-      [tuiTextfieldCleaner]="true"
-      class="w-full mt-4"
-      >
-      Mô tả
-    </tui-textarea>
-    @if (description.invalid && description.touched) {
+    <tui-textarea formControlName="description" [tuiTextfieldCleaner]="true" class="w-full mt-4"> Mô tả </tui-textarea>
+
+    <tui-input formControlName="originPrice" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Giá gốc
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
+    @if (originPrice.invalid && originPrice.touched) {
       <div class="text-red-600 text-sm">
-        @if (description.hasError('required')) {
-          <div>Mô tả là bắt buộc</div>
+        @if (originPrice.hasError('required')) {
+          <div>Giá gốc là bắt buộc</div>
+        }
+        @if (originPrice.hasError('min')) {
+          <div>Giá gốc phải lớn hơn hoặc bằng 0</div>
         }
       </div>
     }
 
-    <tui-textfield
-      tuiChevron
-      [content]="productForm.controls['status'].value"
-      class="w-full mt-4"
-      >
-      <input
-        placeholder="Chọn trạng thái"
-        tuiSelect
-        formControlName="status"
-        />
+    <tui-input formControlName="price" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Giá bán
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
 
-      <tui-data-list-wrapper
-        *tuiTextfieldDropdown
-        new
-        [itemContent]="statusSelectTpl"
-        [items]="StatusList"
-        />
+    <tui-input formControlName="discount" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Giảm giá (%)
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
+    @if (discount.invalid && discount.touched) {
+      <div class="text-red-600 text-sm">
+        @if (discount.hasError('min')) {
+          <div>Giảm giá phải lớn hơn hoặc bằng 0</div>
+        }
+        @if (discount.hasError('max')) {
+          <div>Giảm giá không được vượt quá 100</div>
+        }
+      </div>
+    }
+
+    <tui-input formControlName="stock" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Số lượng tồn kho
+      <input tuiTextfieldLegacy type="number" />
+    </tui-input>
+    @if (stock.invalid && stock.touched) {
+      <div class="text-red-600 text-sm">
+        @if (stock.hasError('min')) {
+          <div>Số lượng tồn kho phải lớn hơn hoặc bằng 0</div>
+        }
+      </div>
+    }
+
+    <tui-input formControlName="brand" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Thương hiệu
+      <input tuiTextfieldLegacy type="text" />
+    </tui-input>
+
+    <tui-input formControlName="weight" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Trọng lượng
+      <input tuiTextfieldLegacy type="text" />
+    </tui-input>
+
+    <tui-input formControlName="origin" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Xuất xứ
+      <input tuiTextfieldLegacy type="text" />
+    </tui-input>
+
+    <tui-textarea formControlName="categories" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Danh mục (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="tags" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Thẻ (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="colors" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Màu sắc (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="sizes" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Kích thước (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="materials" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      Chất liệu (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textarea formControlName="imageUrls" [tuiTextfieldCleaner]="true" class="w-full mt-4">
+      URL ảnh (cách nhau bởi dấu phẩy)
+    </tui-textarea>
+
+    <tui-textfield tuiChevron [content]="getStatusLabel(productForm.controls.status.value)" class="w-full mt-4">
+      <input placeholder="Chọn trạng thái" tuiSelect formControlName="status" />
+
+      <tui-data-list-wrapper *tuiTextfieldDropdown new [itemContent]="statusSelectTpl" [items]="StatusList" />
     </tui-textfield>
 
-    <ng-template
-      #statusSelectTpl
-      let-status
-      >
+    <ng-template #statusSelectTpl let-status>
       <div class="card">
-        {{ status }}
+        {{ getStatusLabel(status) }}
       </div>
     </ng-template>
 
@@ -300,7 +383,7 @@
         appearance="secondary"
         [disabled]="updateProductStatus() === ApiStatus.LOADING"
         (click)="observer.complete()"
-        >
+      >
         Quay lại
       </button>
       <tui-loader
@@ -308,7 +391,7 @@
         [inheritColor]="true"
         [overlay]="true"
         [showLoader]="updateProductStatus() === ApiStatus.LOADING"
-        >
+      >
         <button
           tuiButton
           type="button"
@@ -316,7 +399,7 @@
           class="ml-2"
           [disabled]="productForm.invalid"
           (click)="updateProduct()"
-          >
+        >
           Cập nhật
         </button>
       </tui-loader>
@@ -325,17 +408,10 @@
 </ng-template>
 
 <!-- Xoá sản phẩm -->
-<ng-template
-  #deleteProductTpl
-  let-observer
-  >
+<ng-template #deleteProductTpl let-observer>
   <div class="p-4">
-    <p class="text-lg font-semibold mb-4">
-      Bạn có chắc chắn muốn xóa sản phẩm này không?
-    </p>
-    <p class="text-sm text-gray-600 mb-6">
-      Việc xóa sản phẩm sẽ không thể hoàn tác. Vui lòng xác nhận để tiếp tục.
-    </p>
+    <p class="text-lg font-semibold mb-4"> Bạn có chắc chắn muốn xóa sản phẩm này không? </p>
+    <p class="text-sm text-gray-600 mb-6"> Việc xóa sản phẩm sẽ không thể hoàn tác. Vui lòng xác nhận để tiếp tục. </p>
     <div class="flex justify-end">
       <button
         tuiButton
@@ -343,7 +419,7 @@
         appearance="secondary"
         [disabled]="deleteProductStatus() === ApiStatus.LOADING"
         (click)="observer.complete()"
-        >
+      >
         Huỷ
       </button>
       <tui-loader
@@ -351,16 +427,8 @@
         [inheritColor]="true"
         [overlay]="true"
         [showLoader]="deleteProductStatus() === ApiStatus.LOADING"
-        >
-        <button
-          tuiButton
-          type="button"
-          appearance="negative"
-          class="ml-2"
-          (click)="deleteProduct()"
-          >
-          Xóa
-        </button>
+      >
+        <button tuiButton type="button" appearance="negative" class="ml-2" (click)="deleteProduct()"> Xóa </button>
       </tui-loader>
     </div>
   </div>

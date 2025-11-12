@@ -1,7 +1,7 @@
 <tui-root>
   <header tuiNavigationHeader>
     <div class="w-full flex items-center justify-between">
-      <tui-avatar src="TG" />
+      <tui-avatar src="WK" />
       <button
         appearance="outline"
         tuiAppearanceMode="checked"
@@ -16,38 +16,16 @@
     </div>
   </header>
   <div [style.display]="'flex'">
-    <aside
-      class="aside"
-      [tuiNavigationAside]="expanded()"
-    >
+    <aside class="aside" [tuiNavigationAside]="expanded()">
       <header>
-        <button
-          iconStart="@tui.home"
-          tuiAsideItem
-          type="button"
-          routerLink="/dashboard"
-        >
+        <button iconStart="@tui.home" tuiAsideItem type="button" routerLink="/dashboard">
           <span tuiFade>Trang chủ</span>
         </button>
       </header>
 
-      <button
-        iconStart="@tui.users"
-        tuiAsideItem
-        type="button"
-        routerLink="/users"
-      >
-        Người dùng
-      </button>
+      <button iconStart="@tui.users" tuiAsideItem type="button" routerLink="/users"> Người dùng </button>
 
-      <button
-        iconStart="@tui.layers"
-        tuiAsideItem
-        type="button"
-        routerLink="/products"
-      >
-        Sản phẩm
-      </button>
+      <button iconStart="@tui.layers" tuiAsideItem type="button" routerLink="/products"> Sản phẩm </button>
 
       <footer>
         <button
