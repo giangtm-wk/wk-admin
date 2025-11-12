@@ -17,6 +17,11 @@ src/
 │   └── environment.prod.ts
 └── main.ts
 
+### Develop with AI
+```text
+https://angular.dev/ai/develop-with-ai
+```
+
 ### Getting Started with ESLint
 ```shell
 npm init @eslint/config@latest
